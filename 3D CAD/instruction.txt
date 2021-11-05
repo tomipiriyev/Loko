@@ -1,1 +1,9 @@
 
+Loko case is designed to be printed at SLA or SLS printers with high precision . 
+
+it has 3 parts: upper case, lower case, and button. Highly recommended to print in SLS printer because SLA resin is not strong enough to hold the screws tight in place. 
+
+Onshape link : https://cad.onshape.com/documents/ea37c157b53a530a6731bfff/w/7f627042196df546f38773f3/e/583637f66ec3a8c8bbab63be
+
+Meanwhile you can use transparent plastic as Loko has built in LED,if you want it to be visable from outside.
+
