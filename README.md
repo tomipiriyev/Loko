@@ -8,6 +8,8 @@ Loko is the tiniest GPS tracker what works with Lora radio and can connect to Lo
 
 Loko can run +30 days in a single charge. Loko weights only 12 grams which makes it very suitable to add small devices as well. 
 
+I used ready to use lora-e5 module from Seeed (https://www.seeedstudio.com/LoRa-E5-Wireless-Module-p-4745.html). which as very simple to use AT comands to speed up the development process. It speed up the ton of coding work.
+
 
 
 
