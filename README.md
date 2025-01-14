@@ -10,7 +10,7 @@ Loko can run +30 days in a single charge. Loko weights only 12 grams which makes
 
 I used ready to use lora-e5 module from Seeed (https://www.seeedstudio.com/LoRa-E5-Wireless-Module-p-4745.html). which as very simple to use AT comands to speed up the development process. It speed up the ton of coding work.
 
-LOKO is avaliable to purchase from SeeedStudio BUY LOKO (https://www.seeedstudio.com/Loko-GPS-Tracker-p-6261.html)
+LOKO is avaliable to purchase from NOLILAB:  BUY LOKO ([https://www.seeedstudio.com/Loko-GPS-Tracker-p-6261.html](http://nolilab.com))
 
 
 
