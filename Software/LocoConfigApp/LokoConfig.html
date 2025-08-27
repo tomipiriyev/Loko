@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loko Configuration Tool</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+     <style>
+        :root {
+        --primary-color: #2196f3;
+        --primary-dark: #1976d2;
+        --text-color: #333;
+        --border-color: #ccc;
+        --success-color: #4caf50;
+        --error-color: #f44336;
+        --grey-color: #9e9e9e;
+        }
+
+        * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        }
+
+        body {
+        background-color: #f5f5f5;
+        color: var(--text-color);
+        line-height: 1.6;
+        padding: 0;
+        margin: 0;
+        }
+
+        .container {
+        max-width: 750px;
+        margin: 0 auto;
+        padding: 15px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        }
+
+        .appbar {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 4px 4px 0 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .appbar-title {
+        font-size: 18px;
+        font-weight: bold;
+        }
+
+        .appbar-actions {
+        display: flex;
+        gap: 10px;
+        }
+
+        .tab-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+        }
+
+        .tab-button.active {
+        background-color: var(--primary-dark);
+        font-weight: bold;
+        }
+
+        .tab-button:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content {
+        flex: 1;
+        background-color: white;
+        padding: 16px;
+        border-radius: 0 0 4px 4px;
+        overflow-y: auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+        display: none;
+        }
+
+        .tab-content.active {
+        display: block;
+        }
+
+        .section {
+        margin-bottom: 16px;
+        }
+
+        .row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        }
+
+        .form-group {
+        flex: 1;
+        margin-bottom: 10px;
+        }
+
+        .input-field {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 14px;
+        height: 40px;
+        }
+
+        .input-field:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        }
+
+        label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #666;
+        }
+
+        .checkbox-label {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #666;
+        cursor: pointer;
+        }
+
+        .checkbox-label input {
+        margin-right: 8px;
+        }
+
+        .dropdown {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 14px;
+        height: 40px;
+        }
+
+        .bordered-container {
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 16px;
+        }
+
+        .battery-info {
+        color: var(--success-color);
+        font-weight: 500;
+        font-size: 14px;
+        margin-top: 5px;
+        }
+
+        .bottom-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+        align-items: center;
+        }
+
+        .button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        height: 40px;
+        transition: background-color 0.3s;
+        }
+
+        .button:hover {
+        background-color: var(--primary-dark);
+        }
+
+        .refresh-button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        }
+
+        .refresh-button:hover {
+        background-color: var(--primary-dark);
+        }
+
+        .status-light {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--grey-color);
+        display: inline-block;
+        margin-right: 5px;
+        }
+
+        .status-light.green {
+        background-color: var(--success-color);
+        }
+
+        .status-light.red {
+        background-color: var(--error-color);
+        }
+
+        .output-container {
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 10px;
+        font-family: monospace;
+        height: 120px;
+        overflow-y: auto;
+        background-color: #f8f8f8;
+        white-space: pre-wrap;
+        font-size: 14px;
+        }
+
+        .snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: var(--error-color);
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        padding: 12px;
+        position: fixed;
+        z-index: 1;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 14px;
+        }
+
+        .snackbar.show {
+        visibility: visible;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        .connection-status {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        }
+
+        .status-indicator {
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
+        }
+
+        #air-checkmark {
+        color: var(--success-color);
+        }
+
+        #ground-checkmark {
+        color: var(--success-color);
+        }
+
+        .browser-notice {
+            background-color: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            padding: 15px 20px;
+            margin: 0 auto 15px auto; /* Center horizontally with margin auto */
+            max-width: 750px; /* Match your container width */
+            font-size: 16px;
+            line-height: 1.5;
+            color: #333;
+            text-align: center; /* Center the text */
+        }
+
+        .browser-notice strong {
+            font-weight: bold;
+        }
+
+        .browser-notice p {
+            margin: 0;
+        }
+
+        .browser-notice p + p {
+            margin-top: 5px;
+        }
+
+        @keyframes fadein {
+        from {
+            bottom: 0;
+            opacity: 0;
+        }
+        to {
+            bottom: 30px;
+            opacity: 1;
+        }
+        }
+
+        @keyframes fadeout {
+        from {
+            bottom: 30px;
+            opacity: 1;
+        }
+        to {
+            bottom: 0;
+            opacity: 0;
+        }
+        }
+
+     </style>
+</head>
+<body>
+    <div class="browser-notice">
+        <p>This web application only works in <strong>Chrome</strong> web browser!</p>
+        <p>Please use <strong>Chrome</strong>.</p>
+    </div>
+    <div class="container">
+        <div class="appbar">
+            <div class="appbar-title">Loko Configuration Tool</div>
+            <div class="appbar-actions">
+                <button class="tab-button active" id="air-tab-btn">Air Unit</button>
+                <button class="tab-button" id="ground-tab-btn">Ground Unit</button>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Air Unit Tab -->
+            <div class="tab-content active" id="air-unit-tab">
+                <div class="section">
+                    <div class="firmware-version">Firmware: --</div>
+                </div>
+                
+                <div class="section">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="id1-input">ID1:</label>
+                            <input type="number" id="id1-input" class="input-field" maxlength="3">
+                        </div>
+                        <div class="form-group">
+                            <label for="id2-input">ID2:</label>
+                            <input type="number" id="id2-input" class="input-field" maxlength="2">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="freq-input">Freq: (Hz)</label>
+                            <input type="number" id="freq-input" class="input-field" maxlength="9">
+                        </div>
+                        <div class="form-group">
+                            <label for="interval-input">Interval: (sec)</label>
+                            <input type="number" id="interval-input" class="input-field" maxlength="10" oninput="calculateBatteryLife()">
+                            <div class="battery-text" id="battery-text">Estimated Battery Life: --</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="expand-checkbox">
+                                Enable Velocity & Altitude
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="gnss-dropdown">GNSS Mode</label>
+                            <select id="gnss-dropdown" class="dropdown">
+                                <option value="">Select GNSS Mode</option>
+                                <option value="Fitness">Fitness</option>
+                                <option value="Balloon">Balloon</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section bordered-container">
+                    <div class="row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="lorawan-checkbox">
+                            Enable LoraWAN
+                        </label>
+                    </div>
+                    <div class="section">
+                        <div class="form-group">
+                            <label for="region-dropdown">Region</label>
+                            <select id="region-dropdown" class="dropdown">
+                                <option value="">Select Region</option>
+                                <option value="AS923">AS923</option>
+                                <option value="AU915">AU915</option>
+                                <option value="CN470">CN470</option>
+                                <option value="CN779">CN779</option>
+                                <option value="EU433">EU433</option>
+                                <option value="EU868">EU868</option>
+                                <option value="KR920">KR920</option>
+                                <option value="IN865">IN865</option>
+                                <option value="US915">US915</option>
+                                <option value="RU864">RU864</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="app-key-input">App Key:</label>
+                            <input type="text" id="app-key-input" class="input-field" maxlength="32">
+                        </div>
+                        <div class="form-group">
+                            <label for="dev-eui-input">Dev EUI:</label>
+                            <input type="text" id="dev-eui-input" class="input-field" maxlength="16">
+                        </div>
+                        <div class="form-group">
+                            <label for="app-eui-input">App/Join EUI:</label>
+                            <input type="text" id="app-eui-input" class="input-field" maxlength="16">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section bordered-container">
+                    <div class="row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="p2p-checkbox">
+                            Enable Encryption
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="p2p-input">Key:</label>
+                        <input type="text" id="p2p-input" class="input-field" maxlength="64">
+                    </div>
+                </div>
+                
+                <div class="bottom-controls">
+                    <div class="connection-status">
+                        <button class="button" id="air-connect-button">Connect</button>
+                        <div class="status-indicator" id="air-connection-status">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="display: none;" id="air-checkmark">
+                                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div style="width: 50px;"></div>
+                    <button class="button" id="air-read-button">Read</button>
+                    <button class="button" id="air-submit-button">Send</button>
+                </div>
+                
+                <div class="output-container" id="air-container-text"></div>
+            </div>
+            
+            <!-- Ground Unit Tab -->
+            <div class="tab-content" id="ground-unit-tab">
+                <div class="section">
+                    <div class="form-group">
+                        <label for="ground-id2-input">ID2:</label>
+                        <input type="number" id="ground-id2-input" class="input-field" maxlength="2">
+                    </div>
+                    <div class="form-group">
+                        <label for="ground-freq-input">Freq: (Hz)</label>
+                        <input type="number" id="ground-freq-input" class="input-field" maxlength="9">
+                    </div>
+                    <div class="form-group">
+                        <label for="ground-p2p-input">P2P Key:</label>
+                        <input type="text" id="ground-p2p-input" class="input-field" maxlength="64">
+                    </div>
+                </div>
+                
+                <div class="bottom-controls">
+                    <div class="connection-status">
+                        <button class="button" id="ground-connect-button">Connect</button>
+                        <div class="status-indicator" id="ground-connection-status">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="display: none;" id="ground-checkmark">
+                                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div style="width: 50px;"></div>
+                    <button class="button" id="ground-read-button">Read</button>
+                    <button class="button" id="ground-submit-button">Send</button>
+                </div>
+                
+                <div class="output-container" id="ground-container-text"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="snackbar" id="snackbar">Device disconnected! Please reconnect.</div>
+
+    <script>
+        // Global variables
+        let port = null;
+        let reader = null;
+        let readLoopRunning = false;
+        let currentView = "air"; // 'air' or 'ground'
+
+        // Commands dictionary
+        const commands = {
+        set_id1: "set id1 %d\n",
+        set_id2: "set id2 %d\n",
+        set_freq: "set freq %d\n",
+        set_interval: "set interval %d\n",
+        enable_extended: "extended 1\n",
+        disable_extended: "extended 0\n",
+        set_gnss_fitness: "set gnss mode 1\n",
+        set_gnss_balloon: "set gnss mode 3\n",
+        enable_lorawan: "enable lorawan mode 1\n",
+        disable_lorawan: "enable lorawan mode 0\n",
+        enable_p2p: "p2p encryption 1\n",
+        disable_p2p: "p2p encryption 0\n",
+        set_p2p_key: "set p2p-key %s\n",
+        set_region: "set region %s\n",
+        set_app_key: "set app-key %s\n",
+        set_dev_eui: "set dev-eui %s\n",
+        set_app_eui: "set app-eui %s\n",
+        get_info_air: "info\n",
+
+        // Ground unit commands
+        get_info_ground: "info\r\n",
+        set_ground_id2: "set gid2 %d\r\n",
+        set_ground_freq: "set gfreq %d\r\n",
+        set_ground_p2p_key: "set gp2p-key %s\r\n",
+        };
+
+        // DOM Elements - Air Unit
+        const airTabBtn = document.getElementById("air-tab-btn");
+        const groundTabBtn = document.getElementById("ground-tab-btn");
+        const airUnitTab = document.getElementById("air-unit-tab");
+        const groundUnitTab = document.getElementById("ground-unit-tab");
+        const airPortDropdown = document.getElementById("air-port-dropdown");
+        const airRefreshButton = document.getElementById("air-refresh-button");
+        const airSubmitButton = document.getElementById("air-submit-button");
+        const airReadButton = document.getElementById("air-read-button");
+        const airContainerText = document.getElementById("air-container-text");
+        const airConnectButton = document.getElementById("air-connect-button");
+        const airCheckmark = document.getElementById("air-checkmark");
+
+        // DOM Elements - Ground Unit
+        const groundPortDropdown = document.getElementById("ground-port-dropdown");
+        const groundRefreshButton = document.getElementById("ground-refresh-button");
+        const groundSubmitButton = document.getElementById("ground-submit-button");
+        const groundReadButton = document.getElementById("ground-read-button");
+        const groundContainerText = document.getElementById("ground-container-text");
+        const groundConnectButton = document.getElementById("ground-connect-button");
+        const groundCheckmark = document.getElementById("ground-checkmark");
+
+        // DOM Elements - Air Unit form fields
+        const id1Input = document.getElementById("id1-input");
+        const id2Input = document.getElementById("id2-input");
+        const freqInput = document.getElementById("freq-input");
+        const intervalInput = document.getElementById("interval-input");
+        const batteryText = document.getElementById("battery-text");
+        const expandCheckbox = document.getElementById("expand-checkbox");
+        const gnssDropdown = document.getElementById("gnss-dropdown");
+        const lorawanCheckbox = document.getElementById("lorawan-checkbox");
+        const regionDropdown = document.getElementById("region-dropdown");
+        const appKeyInput = document.getElementById("app-key-input");
+        const devEuiInput = document.getElementById("dev-eui-input");
+        const appEuiInput = document.getElementById("app-eui-input");
+        const p2pCheckbox = document.getElementById("p2p-checkbox");
+        const p2pInput = document.getElementById("p2p-input");
+
+        // DOM Elements - Ground Unit form fields
+        const groundId2Input = document.getElementById("ground-id2-input");
+        const groundFreqInput = document.getElementById("ground-freq-input");
+        const groundP2pInput = document.getElementById("ground-p2p-input");
+
+        // Tab switching
+        airTabBtn.addEventListener("click", () => {
+        airTabBtn.classList.add("active");
+        groundTabBtn.classList.remove("active");
+        airUnitTab.classList.add("active");
+        groundUnitTab.classList.remove("active");
+        currentView = "air";
+        });
+
+        groundTabBtn.addEventListener("click", () => {
+        groundTabBtn.classList.add("active");
+        airTabBtn.classList.remove("active");
+        groundUnitTab.classList.add("active");
+        airUnitTab.classList.remove("active");
+        currentView = "ground";
+        });
+
+        // Battery life calculation
+        function calculateBatteryLife() {
+        if (!intervalInput.value) {
+            batteryText.innerText = "Estimated Battery Life: --";
+            return;
+        }
+
+        try {
+            const interval = parseFloat(intervalInput.value);
+            const batteryLifeHour =
+            0.5735 / ((54 * 15) / (interval * 1000) + 15 / 1000000);
+            const batteryLifeDays = batteryLifeHour / 24;
+
+            if (batteryLifeDays >= 1) {
+            batteryText.innerText = `Estimated Battery Life: ${batteryLifeDays.toFixed(
+                1
+            )} days`;
+            } else if (batteryLifeHour <= 1) {
+            const minutes = batteryLifeHour * 60;
+            batteryText.innerText = `Estimated Battery Life: ${minutes.toFixed(
+                1
+            )} minutes`;
+            } else {
+            batteryText.innerText = `Estimated Battery Life: ${batteryLifeHour.toFixed(
+                1
+            )} hours`;
+            }
+        } catch (error) {
+            batteryText.innerText = "Estimated Battery Life: --";
+        }
+        }
+
+        // Setup interval input to trigger battery calculation
+        intervalInput.addEventListener("input", calculateBatteryLife);
+
+        // Connect button event handler
+        airConnectButton.addEventListener("click", async () => {
+        if (!port) {
+            const newPort = await connectToSerialPort();
+            if (newPort) {
+            // Show checkmark when connected
+            airCheckmark.style.display = "block";
+            airConnectButton.textContent = "Connected";
+            showNotification("Device connected successfully", "#4CAF50");
+            }
+        } else {
+            // If already connected, disconnect
+            await closeSerialPort();
+            airCheckmark.style.display = "none";
+            airConnectButton.textContent = "Connect";
+            showNotification("Device disconnected", "#F44336");
+        }
+        });
+
+        // Connect button event handler
+        groundConnectButton.addEventListener("click", async () => {
+        if (!port) {
+            const newPort = await connectToSerialPort();
+            if (newPort) {
+            // Show checkmark when connected
+            groundCheckmark.style.display = "block";
+            groundConnectButton.textContent = "Connected";
+            showNotification("Device connected successfully", "#4CAF50");
+            }
+        } else {
+            // If already connected, disconnect
+            await closeSerialPort();
+            airCheckmark.style.display = "none";
+            airConnectButton.textContent = "Connect";
+            showNotification("Device disconnected", "#F44336");
+        }
+        });
+
+        // Update port disconnection handling
+        function handleDisconnect() {
+        port = null;
+        airCheckmark.style.display = "none";
+        airConnectButton.textContent = "Connect";
+        groundCheckmark.style.display = "none";
+        groundConnectButton.textContent = "Connect";
+        showNotification("Device disconnected");
+
+        // Update UI
+        if (currentView === "air") {
+            addText(airContainerText, "Device disconnected!");
+        } else {
+            addText(groundContainerText, "Device disconnected!");
+        }
+        }
+
+        // Update the disconnect event listener
+        if (navigator.serial) {
+        navigator.serial.addEventListener("disconnect", (event) => {
+            console.log("Serial device disconnected");
+
+            if (port === event.target) {
+            handleDisconnect();
+            }
+        });
+        }
+
+        // Notification system
+        function showNotification(message, color = "#F44336") {
+        const snackbar = document.getElementById("snackbar");
+        snackbar.innerText = message;
+        snackbar.style.backgroundColor = color;
+        snackbar.className = "snackbar show";
+
+        setTimeout(() => {
+            snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+        }
+
+        // Helper function to add text to container
+        function addText(container, text) {
+        container.innerText += text + "\n-> ";
+        container.scrollTop = container.scrollHeight;
+        }
+
+        // Serial Port Functions
+        async function connectToSerialPort() {
+        if (!navigator.serial) {
+            showNotification(
+            "Web Serial API is not supported in your browser. Please use Chrome or Edge."
+            );
+            return null;
+        }
+
+        try {
+            // Request a port from the user
+            port = await navigator.serial.requestPort();
+
+            // Open the port with appropriate settings
+            await port.open({
+            baudRate: 115200,
+            dataBits: 8,
+            stopBits: 1,
+            parity: "none",
+            flowControl: "none",
+            });
+
+            console.log("Serial port opened successfully");
+
+            // Start the read loop if not already running
+            if (!readLoopRunning) {
+            startReadLoop();
+            }
+
+            return port;
+        } catch (error) {
+            console.error("Error opening serial port:", error);
+            showNotification("Failed to open serial port: " + error.message);
+            return null;
+        }
+        }
+
+        // Function to close the port
+        async function closeSerialPort() {
+        if (reader) {
+            try {
+            await reader.cancel();
+            reader = null;
+            } catch (error) {
+            console.error("Error canceling reader:", error);
+            }
+        }
+
+        if (port) {
+            try {
+            await port.close();
+            port = null;
+            console.log("Serial port closed");
+            } catch (error) {
+            console.error("Error closing serial port:", error);
+            }
+        }
+
+        readLoopRunning = false;
+        }
+
+        // Function to send a command to the device
+        async function sendCommand(command) {
+        if (!port || !port.writable) {
+            const newPort = await connectToSerialPort();
+            if (!newPort) return false;
+        }
+
+        try {
+            const writer = port.writable.getWriter();
+
+            // Encode the command
+            const encoder = new TextEncoder();
+            const data = encoder.encode(command);
+
+            console.log(`Sending command: ${command}`);
+
+            // Write data to the port
+            await writer.write(data);
+
+            // Release the writer
+            writer.releaseLock();
+            return true;
+        } catch (error) {
+            console.error("Error sending command:", error);
+            showNotification("Failed to send command: " + error.message);
+            return false;
+        }
+        }
+
+        // Function to format commands with parameters
+        function formatCommand(commandTemplate, ...args) {
+        let command = commandTemplate;
+        args.forEach((arg, i) => {
+            if (typeof arg === "string") {
+            command = command.replace("%s", arg);
+            } else {
+            command = command.replace("%d", arg);
+            }
+        });
+        return command;
+        }
+
+        // Function to start the continuous read loop
+        async function startReadLoop() {
+        if (readLoopRunning) return;
+
+        readLoopRunning = true;
+
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (port && port.readable && readLoopRunning) {
+            try {
+            reader = port.readable.getReader();
+
+            while (true) {
+                const { value, done } = await reader.read();
+
+                if (done) {
+                break;
+                }
+
+                // Convert received bytes to text and add to buffer
+                const text = decoder.decode(value);
+                buffer += text;
+
+                // Process any complete lines in the buffer
+                const lines = buffer.split(/\r?\n/);
+                buffer = lines.pop() || ""; // Keep the last incomplete line in the buffer
+
+                // Process complete lines
+                for (const line of lines) {
+                processReceivedData(line + "\n");
+                }
+            }
+            } catch (error) {
+            console.error("Error in read loop:", error);
+            } finally {
+            if (reader) {
+                reader.releaseLock();
+                reader = null;
+            }
+            }
+
+            // If we're here, the reader has been closed, but the port is still open
+            // Wait a bit before trying to get a new reader
+            await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        readLoopRunning = false;
+        }
+
+        // Process received data based on content
+        function processReceivedData(data) {
+        console.log("Received:", data);
+
+        const currentContainer =
+            currentView === "air" ? airContainerText : groundContainerText;
+        addText(currentContainer, data.trim());
+
+        // Parse specific data values from responses
+        if (currentView === "air") {
+            // Air Unit data parsing
+            if (data.includes("id_1")) {
+            const match = data.match(/id_1\s*=\s*([0-9a-fx]+)/i);
+            if (match) {
+                let value = match[1].trim();
+                // Handle hex values
+                if (value.includes("x")) {
+                value = parseInt(value, 16).toString();
+                }
+                id1Input.value = value;
+            }
+            } else if (data.includes("id_2")) {
+            const match = data.match(/id_2\s*=\s*([0-9a-fx]+)/i);
+            if (match) {
+                let value = match[1].trim();
+                // Handle hex values
+                if (value.includes("x")) {
+                value = parseInt(value, 16).toString();
+                }
+                id2Input.value = value;
+            }
+            } else if (data.includes("is_extended_packet")) {
+            const match = data.match(/is_extended_packet\s*=\s*(\d+)/i);
+            if (match) {
+                expandCheckbox.checked = match[1] === "1";
+            }
+            } else if (data.includes("gnss_mode")) {
+            const match = data.match(/gnss_mode\s*=\s*(\d+)/i);
+            if (match) {
+                if (match[1] === "1") {
+                gnssDropdown.value = "Fitness";
+                } else if (match[1] === "3") {
+                gnssDropdown.value = "Balloon";
+                }
+            }
+            } else if (data.includes("is_lorawan_mode")) {
+            const match = data.match(/is_lorawan_mode\s*=\s*(\d+)/i);
+            if (match) {
+                lorawanCheckbox.checked = match[1] === "1";
+            }
+            } else if (data.includes("lorawan_region")) {
+            const match = data.match(/lorawan_region\s*=\s*([A-Z0-9]+)/i);
+            if (match) {
+                regionDropdown.value = match[1].trim();
+            }
+            } else if (data.includes("auto_wakeup_period_s")) {
+            const match = data.match(/auto_wakeup_period_s\s*=\s*(\d+)/i);
+            if (match) {
+                intervalInput.value = match[1].trim();
+                calculateBatteryLife();
+            }
+            } else if (data.includes("lora_frequency_hz")) {
+            const match = data.match(/lora_frequency_hz\s*=\s*(\d+)/i);
+            if (match) {
+                freqInput.value = match[1].trim();
+            }
+            }
+        } else {
+            // Ground Unit data parsing
+            if (data.includes("ID2:")) {
+            const parts = data.split(":");
+            if (parts.length > 1) {
+                // Get the second element, trim whitespace, carriage returns, newlines
+                const value = parts[1].replace(/[\r\n\s]/g, "");
+                groundId2Input.value = value;
+            }
+            } else if (data.includes("Frequency")) {
+            const parts = data.split(":");
+            if (parts.length > 1) {
+                // Get the second element, trim whitespace, carriage returns, newlines
+                const value = parts[1].replace(/[\r\n\s]/g, "");
+                groundFreqInput.value = value;
+            }
+            }
+            // Note: P2P key typically cannot be read back
+        }
+        }
+
+        // Function to wait for "OK" response
+        async function waitForOk(timeoutMs = 5000) {
+        return new Promise((resolve) => {
+            const startTime = Date.now();
+
+            // We'll use the processReceivedData function to handle incoming data
+            // And monitor for "OK" response through a polling mechanism
+
+            const checkForOk = setInterval(() => {
+            const currentContainer =
+                currentView === "air" ? airContainerText : groundContainerText;
+            const content = currentContainer.innerText;
+
+            if (content.includes("OK")) {
+                clearInterval(checkForOk);
+                resolve(true);
+                return;
+            }
+
+            // Check for timeout
+            if (Date.now() - startTime > timeoutMs) {
+                clearInterval(checkForOk);
+                resolve(false);
+            }
+            }, 100);
+        });
+        }
+
+        // Function to send a command and wait for OK response
+        async function sendCommandAndWaitForOk(command, containerText) {
+        addText(containerText, `Sending: ${command.trim()}`);
+
+        if (await sendCommand(command)) {
+            const gotOk = await waitForOk();
+
+            if (gotOk) {
+            addText(containerText, "OK");
+            return true;
+            } else {
+            addText(containerText, "No Response");
+            return false;
+            }
+        } else {
+            addText(containerText, "Failed to send command");
+            return false;
+        }
+        }
+
+        // Air Unit Send Button Handler
+        airSubmitButton.addEventListener("click", async () => {
+        if (!port) {
+            const newPort = await connectToSerialPort();
+            if (!newPort) return;
+        }
+
+        airContainerText.innerText = "Connected to device...\n-> ";
+
+        try {
+            // Send ID1 if provided
+            if (id1Input.value) {
+            const command = formatCommand(commands.set_id1, parseInt(id1Input.value));
+            await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Send ID2 if provided
+            if (id2Input.value) {
+            const command = formatCommand(commands.set_id2, parseInt(id2Input.value));
+            await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Send Frequency if provided
+            if (freqInput.value) {
+            const freq = parseInt(freqInput.value.split(" ")[0]);
+            const command = formatCommand(commands.set_freq, freq);
+            await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Send Interval if provided
+            if (intervalInput.value) {
+            const interval = parseInt(intervalInput.value.split(" ")[0]);
+            const command = formatCommand(commands.set_interval, interval);
+            await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Set Extended Mode
+            if (expandCheckbox.checked) {
+            await sendCommandAndWaitForOk(commands.enable_extended, airContainerText);
+            } else {
+            await sendCommandAndWaitForOk(
+                commands.disable_extended,
+                airContainerText
+            );
+            }
+
+            // Set GNSS Mode
+            if (gnssDropdown.value === "Balloon") {
+            await sendCommandAndWaitForOk(
+                commands.set_gnss_balloon,
+                airContainerText
+            );
+            } else {
+            await sendCommandAndWaitForOk(
+                commands.set_gnss_fitness,
+                airContainerText
+            );
+            }
+
+            // Handle P2P encryption
+            if (p2pCheckbox.checked) {
+            await sendCommandAndWaitForOk(commands.enable_p2p, airContainerText);
+
+            if (p2pInput.value) {
+                const command = formatCommand(commands.set_p2p_key, p2pInput.value);
+                await sendCommandAndWaitForOk(command, airContainerText);
+            }
+            } else {
+            await sendCommandAndWaitForOk(commands.disable_p2p, airContainerText);
+            }
+
+            // Set region for both LoRaWAN and non-LoRaWAN modes
+            if (regionDropdown.value) {
+            const command = formatCommand(commands.set_region, regionDropdown.value);
+            await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Handle LoRaWAN
+            if (lorawanCheckbox.checked) {
+            // First disable LoRaWAN to configure
+            await sendCommandAndWaitForOk(commands.disable_lorawan, airContainerText);
+
+            // Set App Key if provided
+            if (appKeyInput.value && appKeyInput.value.length === 32) {
+                const command = formatCommand(commands.set_app_key, appKeyInput.value);
+                await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Set Dev EUI if provided
+            if (devEuiInput.value && devEuiInput.value.length === 16) {
+                const command = formatCommand(commands.set_dev_eui, devEuiInput.value);
+                await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Set App EUI if provided
+            if (appEuiInput.value && appEuiInput.value.length === 16) {
+                const command = formatCommand(commands.set_app_eui, appEuiInput.value);
+                await sendCommandAndWaitForOk(command, airContainerText);
+            }
+
+            // Now enable LoRaWAN
+            await sendCommandAndWaitForOk(commands.enable_lorawan, airContainerText);
+            } else {
+            await sendCommandAndWaitForOk(commands.disable_lorawan, airContainerText);
+            }
+
+            addText(airContainerText, "Configuration Completed Successfully");
+            showNotification("Configuration Completed Successfully", "#4CAF50");
+        } catch (error) {
+            console.error("Error during configuration:", error);
+            addText(airContainerText, `Error: ${error.message}`);
+            showNotification(`Error: ${error.message}`);
+        }
+        });
+
+        // Ground Unit Send Button Handler
+        groundSubmitButton.addEventListener("click", async () => {
+        if (!port) {
+            const newPort = await connectToSerialPort();
+            if (!newPort) return;
+        }
+
+        groundContainerText.innerText = "Connected to device...\n-> ";
+
+        try {
+            // Send ID2 if provided
+            if (groundId2Input.value) {
+            const command = formatCommand(
+                commands.set_ground_id2,
+                parseInt(groundId2Input.value)
+            );
+            await sendCommandAndWaitForOk(command, groundContainerText);
+            }
+
+            // Send Frequency if provided
+            if (groundFreqInput.value) {
+            const freq = parseInt(groundFreqInput.value.split(" ")[0]);
+            const command = formatCommand(commands.set_ground_freq, freq);
+            await sendCommandAndWaitForOk(command, groundContainerText);
+            }
+
+            // Send P2P Key if provided
+            if (groundP2pInput.value && groundP2pInput.value.length >= 32) {
+            // First enable P2P encryption
+            await sendCommandAndWaitForOk(commands.enable_p2p, groundContainerText);
+
+            const command = formatCommand(
+                commands.set_ground_p2p_key,
+                groundP2pInput.value
+            );
+            await sendCommandAndWaitForOk(command, groundContainerText);
+            }
+
+            addText(groundContainerText, "Configuration Completed Successfully");
+            showNotification("Configuration Completed Successfully", "#4CAF50");
+        } catch (error) {
+            console.error("Error during configuration:", error);
+            addText(groundContainerText, `Error: ${error.message}`);
+            showNotification(`Error: ${error.message}`);
+        }
+        });
+
+        // Air Unit Read Button Handler
+        airReadButton.addEventListener("click", async () => {
+        if (!port) {
+            const newPort = await connectToSerialPort();
+            if (!newPort) return;
+        }
+
+        airContainerText.innerText = "Reading device information...\n-> ";
+
+        try {
+            await sendCommand(commands.get_info_air);
+            addText(airContainerText, "Read command sent");
+        } catch (error) {
+            console.error("Error reading air unit data:", error);
+            addText(airContainerText, `Error: ${error.message}`);
+            showNotification(`Error: ${error.message}`);
+        }
+        });
+
+        // Ground Unit Read Button Handler
+        groundReadButton.addEventListener("click", async () => {
+        if (!port) {
+            const newPort = await connectToSerialPort();
+            if (!newPort) return;
+        }
+
+        groundContainerText.innerText = "Reading device information...\n-> ";
+
+        try {
+            await sendCommand(commands.get_info_ground);
+            addText(groundContainerText, "Read command sent");
+        } catch (error) {
+            console.error("Error reading ground unit data:", error);
+            addText(groundContainerText, `Error: ${error.message}`);
+            showNotification(`Error: ${error.message}`);
+        }
+        });
+
+        // Refresh port dropdowns
+        airRefreshButton.addEventListener("click", async () => {
+        if (!navigator.serial) {
+            showNotification("Web Serial API is not supported in your browser");
+            return;
+        }
+
+        // In a real implementation, we would list available ports
+        // However, due to security restrictions, we can only access ports
+        // that the user has previously granted permission to
+        showNotification("Click 'Send' or 'Read' to select a port", "#2196F3");
+        });
+
+        groundRefreshButton.addEventListener("click", async () => {
+        if (!navigator.serial) {
+            showNotification("Web Serial API is not supported in your browser");
+            return;
+        }
+
+        showNotification("Click 'Send' or 'Read' to select a port", "#2196F3");
+        });
+
+        // // Event listeners for port connection/disconnection
+        // if (navigator.serial) {
+        //   navigator.serial.addEventListener("connect", (event) => {
+        //     console.log("Serial device connected");
+        //     showNotification("Serial device connected", "#4CAF50");
+        //   });
+
+        //   navigator.serial.addEventListener("disconnect", (event) => {
+        //     console.log("Serial device disconnected");
+
+        //     if (port === event.target) {
+        //       port = null;
+        //       showNotification("Device disconnected");
+
+        //       // Update UI
+        //       if (currentView === "air") {
+        //         addText(airContainerText, "Device disconnected!");
+        //       } else {
+        //         addText(groundContainerText, "Device disconnected!");
+        //       }
+        //     }
+        //   });
+        // }
+
+        // Add event listener for page unload to close port
+        window.addEventListener("beforeunload", () => {
+        if (port) {
+            closeSerialPort();
+        }
+        });
+
+        // Display initial message
+        addText(
+        airContainerText,
+        "Ready. Connect a device and click 'Read' or 'Send'."
+        );
+        addText(
+        groundContainerText,
+        "Ready. Connect a device and click 'Read' or 'Send'."
+        );
+
+        // Show notification about Web Serial API compatibility
+        if (!navigator.serial) {
+        showNotification(
+            "Web Serial API is not supported in your browser. Please use Chrome or Edge."
+        );
+        }
+
+    </script>
+
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>
