@@ -389,7 +389,7 @@ def battery_level():
 
 def lora_set(freq_hz):
     # Convert Hz to MHz for LoRa module
-    freq_mhz = freq_hz // 1000000
+    freq_mhz = freq_hz / 1000000
 
     LORA_UART.write("AT+MODE=TEST")
     sleep_ms(1000)
@@ -486,8 +486,8 @@ def bin_unpack_lat_lon_24(packed_data):
     if lat_lon_scaled & 0x800000:  # Check if the sign bit is set for a negative value
         lat_lon_scaled -= 0x1000000  # Convert to signed 24-bit integer
 
-    scaling_factor = 10000.0
-    lat_lon = lat_lon_scaled / scaling_factor
+    lat_lon = f'{lat_lon_scaled}'
+    lat_lon = lat_lon[:-4] + '.' + lat_lon[-4:]
 
     return lat_lon
 
@@ -497,8 +497,8 @@ def bin_unpack_lat_lon_32(packed_data):
     if lat_lon_scaled & 0x80000000:  # Check if the sign bit is set for a negative value
         lat_lon_scaled -= 0x100000000  # Convert to signed 32-bit integer
 
-    scaling_factor = 1000000.0
-    lat_lon = lat_lon_scaled / scaling_factor
+    lat_lon = f'{lat_lon_scaled}'
+    lat_lon = lat_lon[:-6] + '.' + lat_lon[-6:]
 
     return lat_lon
 
